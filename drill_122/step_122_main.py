@@ -34,7 +34,9 @@ from tkinter import filedialog
 class ParentWindow(Frame):
     def __init__(self,master):
         Frame.__init__(self)
-
+        global dir_path
+        
+        
         dir_path = tk.StringVar()
         
         # define master frame config
@@ -47,15 +49,16 @@ class ParentWindow(Frame):
         center_window(self,700,200)
         # call function to define grid
         grid_size(self,master)            
-        # create buttons
-        self.btn_Browse = Button(self.master,width=12,text='Browse...',font=('Helvetica',12),fg='#000',bg='#fff',command=askdirectory)
-        self.btn_Browse.grid(row=0,column=0,padx=(35,0),pady=(30,0),sticky=S+W)
-        self.btn_Clear = Button(self.master,width=10,height=2,text='Clear',font=('Helvetica',12),fg='#000',bg='#fff')
-        self.btn_Clear.grid(row=2,column=2,padx=(0,20),pady=(10,10),sticky=N+E)
-
-        # create text field        
+        # create text field and buttons
         self.txt_Results = Entry(self.master,textvariable=dir_path)
         self.txt_Results.grid(row=1,column=0,columnspan=3,padx=(70,20),pady=(15,15),sticky=N+S+E+W)
+        self.btn_Browse = Button(self.master,width=12,text='Browse...',font=('Helvetica',12),fg='#000',bg='#fff',command= lambda: askdirectory(self.txt_Results))
+        self.btn_Browse.grid(row=0,column=0,padx=(35,0),pady=(30,0),sticky=S+W)
+        self.btn_Clear = Button(self.master,width=10,height=2,text='Clear',font=('Helvetica',12),fg='#000',bg='#fff',command=delete_text(self.txt_Results))
+        self.btn_Clear.grid(row=2,column=2,padx=(0,20),pady=(10,10),sticky=N+E)
+        
+                
+        
 
 
 # center window on user's screen
@@ -76,17 +79,16 @@ def grid_size(self,master):
         rows += 1
 
 # open dialog box and search for file, print file path to GUI window
-def askdirectory():
-    txt_Results = filedialog.askdirectory()
+def askdirectory(Results):
     dir_path = filedialog.askdirectory()
-    
-    print(txt_Results(dir_path))
+    Results.insert(10,dir_path)
+    print(dir_path)
 
-
+def delete_text(Results):
+        self.txt_Results.delete('')
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     App = ParentWindow(root)
     root.mainloop()
-    
